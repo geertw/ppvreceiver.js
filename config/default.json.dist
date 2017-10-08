@@ -1,0 +1,14 @@
+{
+  "source": {
+    "server": "tcp://127.0.0.1:12345",
+    "envelopes": {
+      "pil": "/RIG/InfoPlusPILInterface5",
+      "vtbl": "/RIG/InfoPlusVTBLInterface5"
+    }
+  },
+  "redis": {
+    "host": "localhost",
+    "port": 6379,
+    "database": 0
+  }
+}

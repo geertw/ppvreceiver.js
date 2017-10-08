@@ -1,0 +1,16 @@
+{
+  "name": "rdt-ppvreceiver",
+  "version": "1.0.0",
+  "description": "PPV receiver",
+  "main": "ppv-receiver.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Geert Wirken <geert@rijdendetreinen.nl>",
+  "license": "MIT",
+  "dependencies": {
+    "config": "^1.26.2",
+    "redis": "^2.8.0",
+    "zeromq": "^4.6.0"
+  }
+}
