@@ -1,15 +1,23 @@
 var zlib = require('zlib');
 var config = require('config');
+var redis = require("redis");
 var zmq = require('zeromq');
 
 // Parse config:
-var host = config.get("source.server");
+var sourceHost = config.get("source.server");
 var envelopes = config.get("source.envelopes");
 var queues = {};
 
+
+// Create Redis client:
+var redisClient = redis.createClient({
+    url: config.get("redis.url")
+});
+
+// Create ZeroMQ socket
 var sock = zmq.socket('sub');
-sock.connect(host);
-console.log("Listening on " + host);
+sock.connect(sourceHost);
+console.log("Listening on " + sourceHost);
 
 for (var queue in envelopes) {
     if (envelopes.hasOwnProperty(queue)) {
@@ -40,6 +48,7 @@ sock.on('message', function (topic, message) {
 
     var queue = queues[envelope];
 
-    console.log("Queue: " + queue);
-    console.log(message.substring(0, 45) + "...");
+    redisClient.lpush(queue, message);
+
+    console.log("Message pushed to " + queue);
 });
