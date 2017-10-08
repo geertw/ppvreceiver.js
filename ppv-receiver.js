@@ -11,7 +11,13 @@ var queues = {};
 
 // Create Redis client:
 var redisClient = redis.createClient({
-    url: config.get("redis.url")
+    url: config.get("redis.url"),
+    socket_keepalive: true,
+    retry_unfulfilled_commands: true,
+    retry_strategy: function (options) {
+        // reconnect after minimal 3 seconds and max. 61 seconds:
+        return Math.max(Math.min(options.attempt * 100, 3000), 61 * 1000);
+    }
 });
 
 // Create ZeroMQ socket
@@ -48,7 +54,11 @@ sock.on('message', function (topic, message) {
 
     var queue = queues[envelope];
 
-    redisClient.lpush(queue, message);
-
-    console.log("Message pushed to " + queue);
+    try {
+        redisClient.lpush(queue, message);
+        console.log("Message pushed to " + queue);
+    }
+    catch (error) {
+        console.error("Error while pushing message to queue " + queue + ": " + error);
+    }
 });
