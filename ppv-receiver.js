@@ -5,6 +5,7 @@ var zmq = require('zeromq');
 // Parse config:
 var host = config.get("source.server");
 var envelopes = config.get("source.envelopes");
+var queues = {};
 
 var sock = zmq.socket('sub');
 sock.connect(host);
@@ -15,6 +16,8 @@ for (var queue in envelopes) {
         var envelope = envelopes[queue];
         console.log("Subscribing for queue '" + queue + "' to " + envelope);
         sock.subscribe(envelope);
+
+        queues[envelope] = queue;
     }
 }
 
@@ -27,6 +30,16 @@ sock.on('message', function (topic, message) {
         return;
     }
 
-    console.log(topic.toString());
+    // Find correct queue:
+    var envelope = topic.toString();
+
+    if (!queues.hasOwnProperty(envelope)) {
+        console.warn("No queue found for envelope " + envelope + ", message discarded");
+        return;
+    }
+
+    var queue = queues[envelope];
+
+    console.log("Queue: " + queue);
     console.log(message.substring(0, 45) + "...");
 });
