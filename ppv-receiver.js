@@ -20,6 +20,8 @@ var redisClient = redis.createClient({
     }
 });
 
+console.log("Connected to Redis on " + config.get("redis.url"));
+
 // Create ZeroMQ socket
 var sock = zmq.socket('sub');
 sock.connect(sourceHost);
