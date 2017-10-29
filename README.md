@@ -77,3 +77,7 @@ A real-life application of this tool is for the Dutch website [Rijden de Treinen
 all [train disruptions](https://www.rijdendetreinen.nl/en/disruptions) originate from the Dutch railways
 and are delivered as a ZeroMQ pubsub message. This tools listens for various topics and stores the
 uncompressed messages in a Redis queue. The website then processes all disruptions in the queue.
+
+## License
+
+MIT License, see the [LICENSE](LICENSE) file for more information.
