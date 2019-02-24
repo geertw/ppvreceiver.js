@@ -11,6 +11,6 @@
   "dependencies": {
     "config": "^1.26.2",
     "redis": "^2.8.0",
-    "zeromq": "^4.6.0"
+    "zeromq": "^5.1.0"
   }
 }
